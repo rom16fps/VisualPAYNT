@@ -21,6 +21,8 @@ import sys
 import os
 import cProfile, pstats
 
+import paynt.visual.visualize_fsc as vs
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -136,6 +138,9 @@ def setup_logger(log_path = None):
 @click.option("--profiling", is_flag=True, default=False,
     help="run profiling")
 
+@click.option("--visual", is_flag=True, default=False,
+              help="will visualise the FSC")
+
 def paynt_run(
     project, sketch, props, relative_error, optimum_threshold, precision, exact, timeout,
     export,
@@ -149,7 +154,8 @@ def paynt_run(
     tree_depth, tree_enumeration, tree_map_scheduler, add_dont_care_action,
     constraint_bound,
     ce_generator,
-    profiling
+    profiling,
+    visual
 ):
 
     profiler = None
@@ -195,6 +201,12 @@ def paynt_run(
     if profiling:
         profiler.disable()
         print_profiler_stats(profiler)
+
+    if visual and fsc_synthesis:
+
+        # Call your visualization program here
+
+        vs.create_window(str(synthesizer.best_assignment))
 
 def print_profiler_stats(profiler):
     stats = pstats.Stats(profiler)
